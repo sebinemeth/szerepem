@@ -1,6 +1,10 @@
 <template>
   <div class="login">
     <b-container>
+      <b-alert v-model="error" dismissible variant="danger">
+        <h3>Hiba</h3>
+        <p>{{ errorMessage }}</p>
+      </b-alert>
       <h3>Bejelentkezés</h3>
       <b-form @submit="login">
         <div class="my-3">
@@ -31,30 +35,25 @@ import firebase from "firebase";
 export default {
   name: "Login",
   data() {
-    return { email: "", password: "" };
+    return { email: "", password: "", error: false, errorMessage: "" };
   },
   methods: {
-    async login() {
+    async login(event, provider = null) {
       try {
-        await firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password);
+        if (!provider)
+          await firebase
+            .auth()
+            .signInWithEmailAndPassword(this.email, this.password);
+        else await firebase.auth().signInWithPopup(provider);
         this.$router.replace("home");
       } catch (error) {
         console.log(error);
+        this.errorMessage = error.message;
+        this.error = true;
       }
     },
-    async loginGoogle() {
-      try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await firebase.auth().signInWithPopup(provider);
-        // var token = result.credential.accessToken;
-        // var user = result.user;
-        console.log(result);
-        this.$router.replace("home");
-      } catch (error) {
-        console.log(error);
-      }
+    loginGoogle() {
+      this.login(null, new firebase.auth.GoogleAuthProvider());
     },
   },
 };
