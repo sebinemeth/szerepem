@@ -1,8 +1,31 @@
 <template>
   <div class="home">
     <b-container>
-      <h3>Hello {{ user.name || user.email }}</h3>
-      <b-button @click="logout">Kijelentkezés</b-button>
+      <b-card>
+        <b-media>
+          <template #aside>
+            <b-avatar :src="user.photoUrl" />
+          </template>
+
+          <h5 class="mt-0">{{ user.name || "névtelen" }}</h5>
+          <p class="mb-0">
+            {{ user.email }}
+            <b-icon-check-circle-fill
+              v-if="user.emailVerified"
+              variant="success"
+            />
+            <template v-else>
+              <b-icon-exclamation-circle-fill variant="danger" /><br />
+              <b-link @click="verifyEmail">
+                Email cím igazolása
+              </b-link>
+            </template>
+          </p>
+        </b-media>
+      </b-card>
+      <div class="mt-3 text-right">
+        <b-button @click="logout" variant="light">Kijelentkezés</b-button>
+      </div>
     </b-container>
   </div>
 </template>
@@ -12,7 +35,6 @@ import firebase from "firebase";
 
 export default {
   name: "Home",
-  components: {},
   computed: {
     user() {
       var user = firebase.auth().currentUser;
@@ -31,6 +53,14 @@ export default {
     async logout() {
       await firebase.auth().signOut();
       this.$router.replace("login");
+    },
+    async verifyEmail() {
+      const user = firebase.auth().currentUser;
+      try {
+        user.sendEmailVerification();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
