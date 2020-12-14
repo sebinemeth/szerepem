@@ -13,7 +13,11 @@ const routes = [
     redirect: 'login'
   },
   {
-    path: "/",
+    path: '/',
+    redirect: 'login'
+  },
+  {
+    path: "/home",
     name: "Home",
     component: Home,
     meta: {
