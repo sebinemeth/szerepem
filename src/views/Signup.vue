@@ -20,14 +20,17 @@
           placeholder="Jelszó"
         ></b-form-input>
       </div>
-      <div class="my-3">
+      <!--div class="my-3">
         <b-form-input
           v-model="passwordAgain"
           type="password"
           placeholder="Jelszó"
         ></b-form-input>
-      </div>
+      </div-->
       <b-button @click="signup">Regisztráció</b-button>
+      <div class="mt-3">
+        vissza a <router-link to="/login">Bejelentkezésre</router-link>
+      </div>
     </b-container>
   </div>
 </template>
