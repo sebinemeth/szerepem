@@ -26,6 +26,7 @@
       <div class="my-3">
         <b-button @click="loginGoogle" variant="danger">Google</b-button>
       </div>
+      vagy <router-link to="/signup">Regisztráció</router-link>
     </b-container>
   </div>
 </template>
